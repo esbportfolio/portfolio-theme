@@ -1,7 +1,10 @@
-				</div>
-			</div>
-		</main>
-	<!-- Begin Wordpress footer -->
+<?php
+/**
+ * The template for displaying the footer
+ */
+?>
+
+<!-- Begin Wordpress footer -->
 <?php wp_footer(); ?>
 <!-- End Wordpress footer -->
 	</body>
