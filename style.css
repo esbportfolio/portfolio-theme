@@ -1,38 +1,44 @@
-@charset "UTF-8";
-
 /*
-Theme Name: ESB Portfolio
+Theme Name: ESB Portfolio Theme
 Author: Elizabeth Sullivan-Burton
+Author URI: https://esbportfolio.com/
+Version: 2.0
+Text Domain: esb
 */
 
-.no-bullets {
-	list-style: none;
+/* GLOBAL CUSTOMIZATION CLASSES */
+
+a.esb-hover-line-only {
+  text-decoration: none;
 }
 
-.comments .is-author {
-	background-color: #cfe2ff;
+a.esb-hover-line-only:hover {
+  text-decoration: underline;
 }
 
-.comments .is-unapproved {
-	background-color: #ffe5d0;
+a.esb-hover-bold-only {
+  text-decoration: none;
 }
 
-.comments .date {
-	font-size: 0.83rem;
+a.esb-hover-bold-only:hover {
+  font-weight: bold;
 }
 
-.wp-block-code {
-	max-height: 10rem;
-	padding: 0.5rem;
-	background-color: #F8F9FA;
-	border: 1px solid #6c757d;
-	overflow: auto;
+/* Set this in conjunction with a text color on a parent element
+to override the color of child elements. Especially useful if you'll
+be producing links automatically via a walker. */
+.esb-override-link-color a {
+  color: inherit;
 }
 
-.aside {
-	margin-left: 1rem;
-	padding-left: 1rem;
-	border-left: 3px solid #212529;
-	color: #6c757d;
-	font-style: italic;
+/* HEADER CUSTOMIZATION CLASSES */
+
+.esb-site-logo {
+  max-height: 2em;
+}
+
+/* FOOTER CUSTOMIZATION CLASSES */
+
+.esb-copyright {
+  font-size: 0.85em;
 }

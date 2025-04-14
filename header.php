@@ -1,70 +1,82 @@
 <?php
 /**
- * The header.
- *
- * This is the template that displays all of the <head> section and everything up until main.
- *
- * @link https://developer.wordpress.org/themes/basics/template-files/#template-partials
- *
- * @package WordPress
- * @subpackage ESB Portfolio
+ * The template for displaying the header
  */
 
 declare(strict_types=1);
-
-$base_indent = 5;
-
-// The menu has to be named 'Primary Menu' for this to work--fix later
-$check_menu = wp_get_nav_menu_object('Primary Menu');
-if ( ! $check_menu || $check_menu->count === 0) {
-	$main_menu = '<ul class="navbar-nav ms-auto"></ul>';
-} else {
-	$main_menu = wp_nav_menu([
-		'menu' => 'Primary Menu',
-		'container' => false,
-		'container_class' => 'navbar navbar-expand-lg navbar-dark bg-dark',
-		'menu_class' => 'navbar-nav',
-		'items_wrap' => str_repeat( "\t", $base_indent ) . '<ul class="%2$s ms-auto">%3$s' . "\n" . str_repeat( "\t", $base_indent ) . '</ul>',
-		'walker' => new Esb_Nav_Walker(),
-		'echo' => false,
-		// Custom argument to help with indenting properly
-		'base_indent' => $base_indent + 1
-	]);
-}
-
-if ( strlen(get_site_icon_url()) > 0 ) {
-	$brand_img = ' <img src="' . get_site_icon_url() . '" alt="' . get_bloginfo('name') . ' logo" height="42px">';
-	$brand_insert = '<a class="navbar-brand" href="' . get_site_url() . '">' . $brand_img . '</a>' . "\n";
-} else {
-	$brand_insert = '';
-}
-
 ?>
 <!doctype html>
 <html <?php language_attributes(); ?>>
 	<head>
 		<meta charset="<?php bloginfo('charset'); ?>">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!-- Begin Wordpress header -->
+<!-- Begin Wordpress header -->
 <?php wp_head(); ?>
 <!-- End Wordpress header -->
 	</head>
-	<body class="bg-light">
-		<nav class="navbar navbar-expand-lg navbar-light bg-light">
-			<div class="container">
-				<?php echo $brand_insert; ?><a class="navbar-brand" href="<?php echo get_site_url(); ?>"><?php echo get_bloginfo('name'); ?></a>
-				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="collapse navbar-collapse" id="navbarSupportedContent">
-<?php echo $main_menu . "\n"; ?>
-					<form class="d-flex" role="search" method="get" action="<?php echo esc_url(home_url('/')); ?>">
-						<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" value="<?php echo get_search_query(); ?>" name="s">
-						<button class="btn btn-success" type="submit" value="Search" >Search</button>
-					</form>
+    <body class="d-flex flex-column min-vh-100 bg-light">
+		<header>
+			<nav class="navbar navbar-expand-lg mb-4">
+				<div class="container">
+					<div class="d-flex">
+						<?php
+// Display logo if a custom logo has been selected
+if (has_custom_logo()) {
+
+	$html_helper = new Esb_Html_Helper();
+
+	// Get the data for the logo image
+	$img_id = intval(get_theme_mod('custom_logo'));
+	$img_data = esb_get_image_data($img_id);
+
+	// Create the image tag
+	$img_html = $html_helper->create_html_tag(
+		tag_type: 'img',
+		return_str: false,
+		classes: array('d-inline-block', 'align-middle', 'esb-site-logo'),
+		attr: array(
+			'src' => $img_data['src'],
+			'alt' => $img_data['alt']
+		)
+	);
+
+	// Nest the image in an anchor tag
+	$logo_html = $html_helper->create_html_tag(
+		tag_type: 'a',
+		inner_html: $img_html['start'],
+		classes: array('navbar-brand'),
+		attr: array('href'=>get_site_url())
+	);
+	
+	// Output the logo
+	echo $logo_html . N;
+}
+?>
+						<a class="navbar-brand py-2" href="<?php echo get_site_url(); ?>"><?php echo get_bloginfo('name'); ?></a>
+					</div>
+					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav ms-auto">
+<!-- Begin main nav walker -->
+<?php
+// Note: If a menu isn't found at the location below,
+// wp_nav_menu falls back to the first menu created
+wp_nav_menu(array(
+	'menu' => esb_get_menu_id('header-menu'),
+	'container' => false,
+	'items_wrap' => '%3$s',
+	'walker' => new Esb_Nav_Header_Walker(new Esb_Html_Helper(), 7),
+));
+?>
+<!-- End main nav walker -->
+						</ul>
+						<form class="d-flex mt-2 mt-md-0 ms-md-3" role="search" method="get" action="<?php echo esc_url(home_url('/')); ?>">
+							<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" value="<?php echo get_search_query(); ?>" name="s">
+							<button class="btn btn-success" type="submit" value="Search" >Search</button>
+						</form>
+					</div>
 				</div>
-			</div>
-		</nav>
-		<main>
-			<div class="container mt-3">
-				<div class="row">
+			</nav>
+		</header>

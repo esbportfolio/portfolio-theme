@@ -1,78 +1,128 @@
 <?php
+/**
+ * ESB Portfolio Theme functions and definitions
+ * 
+ * This file contains only functions related to setting up the theme.
+ * Any other functions that need to be loaded should be placed inside
+ * the /inc directory.
+ */
 
 declare(strict_types=1);
 
-if ( ! function_exists( 'esb_portfolio_setup' ) ) {
-	/**
-	 * Sets up theme defaults and registers support for various WordPress features.
-	 *
-	 * Note that this function is hooked into the after_setup_theme hook, which
-	 * runs before the init hook. The init hook is too late for some features, such
-	 * as indicating support for post thumbnails.
-	 *
-	 * @return void
-	 */
-	function esb_portfolio_setup() {
+/* ----- ACTIONS ----- */
+
+/* ## HOOK: after_setup_theme ##
+This hook fires when the theme is initialized.
+This can be used for init actions that need to happen when a theme
+is launched.
+*/
+
+// Import dependencies
+if (!function_exists('esb_dependency_setup')) {
+    function esb_dependency_setup() {
+
+        // List of required files (must be present for theme to work)
+        $required_files = array(
+            get_stylesheet_directory() . '/inc/constants.php', // Constants
+            get_stylesheet_directory() . '/inc/helpers.php', // Helper functions
+
+            get_stylesheet_directory() . '/classes/abstract-esb-nav-walker.php', // Walker - Navigation walker abstract class
+            get_stylesheet_directory() . '/classes/class-esb-nav-header-walker.php', // Walker - Header navigation walker
+
+            get_stylesheet_directory() . '/classes/class-esb-html-helper.php', // HTML helper class, goes before rest of classes
+        );
+
+        // List of included files (theme will work even if not present)
+        $included_files = array(
+            get_stylesheet_directory() . '/inc/cleanup.php', // Cleanup extra WP code
+        );
+        
+        // Require files
+        foreach ($required_files as $dependency) {
+            require_once($dependency);
+        }
+
+        // Include files
+        foreach ($included_files as $dependency) {
+            include_once($dependency);
+        }
+    }
+}
+
+add_action( 'after_setup_theme', 'esb_dependency_setup' );
+
+// Add support for theme features
+if (!function_exists('esb_theme_setup')) {
+    
+    function esb_theme_setup() {
+
 		// Let Wordpress manage site title
 		add_theme_support( 'title-tag' );
 		// Add support for custom logo
 		add_theme_support( 'custom-logo' );
-		
-		/*
-		 * Register navigation menus
-		 */
-		register_nav_menus( array(
-			'primary'   => esc_html__( 'Primary Menu', 'esb_portfolio_setup' ),
-			'secondary' => esc_html__( 'Secondary Menu', 'esb_portfolio_setup' )
-		) );
+
+        // Register menus for theme
+        register_nav_menus( array(
+            'header-menu' => 'Header Menu'
+        ) );
+        
+    }
+}
+
+add_action( 'after_setup_theme', 'esb_theme_setup' );
+
+/* ## HOOK: wp_enqueue_scripts ##
+This hook fires when scripts and styles are enqueued.
+This can be used to enqueue both scripts and styles.  Use
+the dependency array to manage styles/scripts that need to
+be loaded after styles/scripts.
+*/
+
+// Add CSS and JS files
+function esb_enqueue_scripts() {
+	
+    // Bootstrap CSS (loaded from CDN)
+    wp_enqueue_style(
+        'bootstrap_css',
+        'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css'
+    );
+
+    // Local CSS (depends on Bootstrap)
+    wp_enqueue_style(
+        'esb_main_css',
+        get_stylesheet_uri(),
+        array('bootstrap_css')
+    );
+
+    // Bootstrap JS (loaded from CDN)
+    wp_enqueue_script(
+        'bootstrap_js',
+        'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js',
+        array(),
+        false,
+        array(
+            'strategy' => 'defer'
+        )
+    );
+
+    // WP comment reply JavaScript (loaded only if necesary)
+	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
+		wp_enqueue_script( 'comment-reply' );
 	}
 }
 
-add_action( 'after_setup_theme', 'esb_portfolio_setup' );
+add_action( 'wp_enqueue_scripts', 'esb_enqueue_scripts' );
 
-// Add CSS and JS files
-function add_theme_scripts() {
-	wp_enqueue_style( 'bootstrap_css', 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css' );
-	wp_enqueue_style( 'main_css', get_stylesheet_uri() );
-	wp_enqueue_script( 'bootstrap_js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js', array(), false, true );
-}
+/* ----- FILTERS ----- */
 
-add_action( 'wp_enqueue_scripts', 'add_theme_scripts' );
+/* ## FILTER: comment_form_default_fields ##
+This hook fires when the default fields for a comment form
+are loaded.  This can be used to remove default fields.
+*/
 
-// Bring in constants for use throughout code
-// This must go before subsequent include/requires because it defines the __ROOT__ constant
-require_once( dirname(__FILE__) . '/inc/constant.php' );
-
-$include_list = [
-	// Cleanup unneeded CSS and JS
-	__ROOT__ . '/inc/cleanup.php' 
-];
-
-$require_list = [
-	// Custom walkers
-	__ROOT__ . '/classes/class-esb-nav-walker.php',
-	__ROOT__ . '/classes/class-esb-cat-walker.php',
-	__ROOT__ . '/classes/class-esb-comment-walker.php',
-	// Formatting functions
-	__ROOT__ . '/inc/format.php'
-];
-
-// include files
-foreach ( $include_list as $dependency ) {
-	require_once($dependency);
-}
-
-// Require files
-foreach ( $require_list as $dependency ) {
-	require_once($dependency);
-}
-
-// Remove default website field from comment form
-// See https://developer.wordpress.org/reference/hooks/comment_form_default_fields/#comment-2565
-function wpdocs_remove_website_field( $fields ) {
+function esb_remove_website_field( $fields ) {
 	unset( $fields['url'] );
-	unset( $fields['email'] );
 	return $fields;
 }
 
-add_filter( 'comment_form_default_fields', 'wpdocs_remove_website_field' );
+add_filter( 'comment_form_default_fields', 'esb_remove_website_field' );
