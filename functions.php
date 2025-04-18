@@ -26,10 +26,16 @@ if (!function_exists('esb_dependency_setup')) {
             get_stylesheet_directory() . '/inc/constants.php', // Constants
             get_stylesheet_directory() . '/inc/helpers.php', // Helper functions
 
+            get_stylesheet_directory() . '/classes/class-esb-html-helper.php', // HTML helper class, goes before rest of classes
+
             get_stylesheet_directory() . '/classes/abstract-esb-nav-walker.php', // Walker - Navigation walker abstract class
             get_stylesheet_directory() . '/classes/class-esb-nav-header-walker.php', // Walker - Header navigation walker
+            // get_stylesheet_directory() . '/classes/class-esb-comment-walker.php', // Walker - Comment walker
 
-            get_stylesheet_directory() . '/classes/class-esb-html-helper.php', // HTML helper class, goes before rest of classes
+            // get_stylesheet_directory() . '/classes/class-esb-form-formatter.php', // Class for handling form formatting
+            // get_stylesheet_directory() . '/classes/class-esb-page-formatter.php', // Class for handling page formatting
+            // get_stylesheet_directory() . '/classes/class-esb-pagination-formatter.php', // Class for handling pagination
+            get_stylesheet_directory() . '/classes/class-esb-post-formatter.php', // Class for handling post formatting
         );
 
         // List of included files (theme will work even if not present)

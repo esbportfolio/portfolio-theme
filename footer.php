@@ -3,6 +3,9 @@
  * The template for displaying the footer
  */
 ?>
+                </div>
+            </div>
+        </main>
 		<footer class="mt-auto">
 			<div class="bg-dark text-light">
 				<div class="container-fluid esb-copyright">

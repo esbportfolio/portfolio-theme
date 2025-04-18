@@ -80,3 +80,6 @@ wp_nav_menu(array(
 				</div>
 			</nav>
 		</header>
+        <main>
+            <div class="container mt-3">
+                <div class="row">

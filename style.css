@@ -24,6 +24,10 @@ a.esb-hover-bold-only:hover {
   font-weight: bold;
 }
 
+a.esb-hover-line-none:hover {
+  text-decoration: none;
+}
+
 /* Set this in conjunction with a text color on a parent element
 to override the color of child elements. Especially useful if you'll
 be producing links automatically via a walker. */
