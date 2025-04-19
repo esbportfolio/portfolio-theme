@@ -28,6 +28,13 @@ if ( have_posts() ) {
 }
 ?>
                     </div>
+					<div class="col-12 col-lg-3">
+						<div class="card mb-3">
+							<div class="card-body">
+<?php get_sidebar(); ?>
+							</div>
+						</div>
+					</div>
 <?php
 
 get_footer();
