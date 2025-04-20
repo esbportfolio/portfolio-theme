@@ -31,7 +31,7 @@ if (!function_exists('esb_dependency_setup')) {
             get_stylesheet_directory() . '/classes/abstract-esb-nav-walker.php', // Walker - Navigation walker abstract class
             get_stylesheet_directory() . '/classes/class-esb-cat-walker.php', // Walker - Category walker
             get_stylesheet_directory() . '/classes/class-esb-nav-header-walker.php', // Walker - Header navigation walker
-
+            
             get_stylesheet_directory() . '/classes/class-esb-post-formatter.php', // Class for handling post formatting
         );
 
@@ -123,6 +123,7 @@ This hook fires when the default fields for a comment form
 are loaded.  This can be used to remove default fields.
 */
 
+// Remove website field from comment form
 function esb_remove_website_field( $fields ) {
 	unset( $fields['url'] );
 	return $fields;
