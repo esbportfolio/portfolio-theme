@@ -19,3 +19,11 @@ This classic theme has been custom-built for my portfolio site.
 ### 1.0
 
 - Released: November 30, 2024
+
+### 2.0
+
+- Released: April 20, 2025
+    - Refactored class structure
+    - Refactored code throughout to avoid polluting global namespace
+    - Added support for comments
+    - Added other QOL improvements
