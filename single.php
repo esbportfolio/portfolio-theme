@@ -16,11 +16,6 @@ if ( have_posts() ) {
 	while ( have_posts() ) {
 		the_post();
         echo $post_formatter->format_post(5);
-
-        // If there are comments or if comments are open, insert the comments template
-        if ( comments_open() || intval(get_comments_number()) > 0 ) {
-            comments_template('/comments.php');
-        }
 	}
 }
 ?>
@@ -33,5 +28,9 @@ if ( have_posts() ) {
 						</div>
 					</div>
 <?php
+// If there are comments or if comments are open, insert the comments template
+if ( comments_open() || intval(get_comments_number()) > 0 ) {
+	comments_template('/comments.php');
+}
 
 get_footer();

@@ -31,7 +31,9 @@ if (!function_exists('esb_dependency_setup')) {
             get_stylesheet_directory() . '/classes/abstract-esb-nav-walker.php', // Walker - Navigation walker abstract class
             get_stylesheet_directory() . '/classes/class-esb-cat-walker.php', // Walker - Category walker
             get_stylesheet_directory() . '/classes/class-esb-nav-header-walker.php', // Walker - Header navigation walker
+            get_stylesheet_directory() . '/classes/class-esb-comment-walker.php', // Walker - Comment walker
 
+            get_stylesheet_directory() . '/classes/class-esb-form-formatter.php', // Class for handling form formatting
             get_stylesheet_directory() . '/classes/class-esb-pagination-formatter.php', // Class for handling pagination
             get_stylesheet_directory() . '/classes/class-esb-post-formatter.php', // Class for handling post formatting
         );
