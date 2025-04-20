@@ -38,7 +38,7 @@ class Esb_Html_Helper {
         // Format attributes
         $attr_f = '';
         foreach ($attr as $key => $value) {
-            $attr_f .= " ${key}=\"$value\"";
+            $attr_f .= " $key=\"$value\"";
         }
 
         // Create tag array
