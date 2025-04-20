@@ -1,8 +1,6 @@
 <?php
 /**
- * The template for displaying comments
- * 
- * This is the template that displays the area of the page that contains the pagination.
+ * The template for displaying pagination
  * 
  * This should always be called inside a conditional statement, since the pagination section
  * shouldn't be created if it isn't necessary.  Variables in this file should be scoped
